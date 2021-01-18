@@ -40,15 +40,15 @@ struct StatData {
     unsigned int rBytes;
 };
 
-void ConvInsert(std::map<IpPair, StatData>&_conv, IpPair _ipPair, Pkt* _pktData) {
+void ConvInsert(std::map<IpPair, StatData>&_conv, IpPair _ipPair, Pkt* _pktData, pcap_pkthdr* _hdr) {
     std::map<IpPair, StatData>::iterator iter;
     iter = _conv.find(_ipPair);
     if (_conv.end() == iter) {
-        StatData temp{1, _pktData->ip.size(), 1, _pktData->ip.size(), 0, 0};
+        StatData temp{1, _hdr->caplen, 1, _hdr->caplen, 0, 0};
         _conv.insert(std::pair<IpPair, StatData>(_ipPair, temp));
     } else {
-        iter->second.packets++; iter->second.bytes+=_pktData->ip.size();
-        iter->second.tPackets++; iter->second.tBytes+=_pktData->ip.size();
+        iter->second.packets++; iter->second.bytes+=_hdr->caplen;
+        iter->second.tPackets++; iter->second.tBytes+=_hdr->caplen;
     }
 };
 
@@ -162,7 +162,7 @@ int main(int argc, char** argv) {
             ipPair.source_ = pktData->ip.sip();
             ipPair.destination_ = pktData->ip.dip();
 
-            ConvInsert(ipConvStat, ipPair, pktData);
+            ConvInsert(ipConvStat, ipPair, pktData, hdr);
         }
     }
     ConvJoin(ipConvStat);
