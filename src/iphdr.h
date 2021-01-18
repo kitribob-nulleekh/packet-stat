@@ -16,9 +16,9 @@ struct IpHdr final {
     Ip sip_;
     Ip dip_;
 
-	Ip       dip() { return dip_; }
-	Ip       sip() { return sip_; }
-	uint16_t size() { return len_; }
+	Ip       dip() { return ntohl(dip_); }
+	Ip       sip() { return ntohl(sip_); }
+	uint16_t size() { return ntohs(len_); }
 };
 typedef IpHdr *PIpHdr;
 #pragma pack(pop)
