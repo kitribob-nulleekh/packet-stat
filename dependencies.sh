@@ -1,2 +1,2 @@
 sudo apt update
-sudo apt install g++ libpcap-dev -y
+sudo apt install g++ make libpcap-dev -y
